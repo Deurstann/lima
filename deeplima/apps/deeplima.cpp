@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
   bool arg_tokenize = false, arg_tag = false, arg_entity = false;
   size_t threads = 1;
-  string input_format, output_format, tok_model, tag_model;
+  string input_format, output_format, tok_model, tag_model, lem_model;
   vector<string> input_files;
 
   po::options_description desc("deeplima (analysis demo)");
@@ -60,6 +60,7 @@ int main(int argc, char* argv[])
   ("output-format",   po::value<string>(&output_format)->default_value("conllu"),   "Output format: conllu|vertical|horizontal")
   ("tok-model",       po::value<string>(&tok_model)->default_value(""),             "Tokenization model")
   ("tag-model",       po::value<string>(&tag_model)->default_value(""),             "Tagging model")
+  ("lem-model",       po::value<string>(&lem_model)->default_value(""),             "Lemmatization model")
   ("input-file",      po::value<vector<string>>(&input_files),                      "Input file names")
   ("threads",         po::value<size_t>(&threads),                                  "Max threads to use")
   ;
@@ -102,6 +103,11 @@ int main(int argc, char* argv[])
   if (tag_model.size() > 0)
   {
     models["tag"] = tag_model;
+  }
+
+  if (lem_model.size() > 0)
+  {
+    models["lem"] = lem_model;
   }
 
   size_t out_fmt = 1;
@@ -163,8 +169,16 @@ void parse_file(istream& input,
   dumper::AbstractDumper* pdumper = nullptr;
   if (models_fn.end() != models_fn.find("tag"))
   {
+    string lemm_model_fn;
+    map<string, string>::const_iterator it = models_fn.find("lem");
+    if (models_fn.end() != it)
+    {
+      lemm_model_fn = it->second;
+    }
+
     panalyzer
-        = new TokenSequenceAnalyzer<eigen_wrp::EigenMatrixXf>(models_fn.find("tag")->second, path_resolver, 1024, 8);
+        = new TokenSequenceAnalyzer<eigen_wrp::EigenMatrixXf>(models_fn.find("tag")->second,
+                                                              lemm_model_fn, path_resolver, 1024, 8);
 
     psegm->register_handler([panalyzer]
                             (const vector<segmentation::token_pos>& tokens,
