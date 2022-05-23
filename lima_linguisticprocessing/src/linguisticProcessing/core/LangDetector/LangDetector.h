@@ -32,7 +32,7 @@ namespace Lima::LinguisticProcessing::LDetector
 
 class CharChart;
 
-class LangDetectorCore;
+class LangDetectorPrivate;
 
 /** @brief This is a @ref MediaProcessUnit that is usually the first element of the pipeline. It cuts the input text into tokens
   *
@@ -61,7 +61,7 @@ public:
   LimaStatusCode process(AnalysisContent& analysis) const override;
   
   private:
-    LangDetectorCore* m_d;
+    LangDetectorPrivate* m_d;
 };
 
 } // namespace Lima
