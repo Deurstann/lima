@@ -429,6 +429,7 @@
       <param key="charChart" value="flatcharchart"/>
     </group>
     <group name="langdetector" class="LangDetector">
+      <param key="langDetectorModel" value="LinguisticProcessings/LangDetector/lid.176.ftz"/>
     </group>
     <group name="regexmatcher" class="RegexMatcher">
       <map name="regexes">
