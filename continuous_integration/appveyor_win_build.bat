@@ -2,6 +2,7 @@ pushd c:\\projects\\lima
 git submodule init
 git submodule update
 qhttpserver.exe /S /NCRC /D=c:\d
+del %USERPROFILE%\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.Win32.user.props
 popd
 mkdir c:\b
 cd c:\b
